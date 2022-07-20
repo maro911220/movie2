@@ -6,6 +6,8 @@ import ws from "gulp-webserver";
 import gulpAutoprefixer from "gulp-autoprefixer";
 import bro from "gulp-bro";
 import babelify from "babelify";
+import ghPage from "gulp-gh-pages";
+
 const sass = require("gulp-sass")(require("node-sass"));
 
 // 경로 설정 
@@ -36,7 +38,7 @@ const routes ={
 }
 
 const clean = ()=> 
-    del(["build"]);
+    del(["build",".publish"]);
 
 const html =()=>
     gulp
@@ -81,10 +83,15 @@ const watch =()=>
     gulp.watch(routes.sass.watch, style)
     gulp.watch(routes.js.watch, js)
 
+const deploys = ()=>
+    gulp.src('build/**/*')
+        .pipe(ghPage());
+
     
 const prepare = gulp.series([clean,img]);
 const assets = gulp.series([html,style,js,lib]);
 const postDev = gulp.parallel([webserver, watch])
 
-
-export const dev = gulp.series([prepare,assets,postDev]);
+export const build = gulp.series([prepare,assets])
+export const dev = gulp.series([build,postDev]);
+export const deploy = gulp.series([build,deploys,clean])
