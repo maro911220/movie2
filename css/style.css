@@ -226,7 +226,7 @@ body {
   .movie-item {
     width: calc(100% - 20px); }
   .movie-poster {
-    height: 120vw; } }
+    height: 130vw; } }
 
 .top-btn {
   display: flex;
